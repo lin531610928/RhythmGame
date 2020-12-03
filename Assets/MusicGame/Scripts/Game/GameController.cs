@@ -4,20 +4,21 @@ using UnityEngine;
 using UniRx;
 using System.Linq;
 using AssemblyCSharp.Assets.MusicGame;
+using UniRx.Triggers;
 
 public class GameController : MonoBehaviour
 {
     public LineRenderer lineRenderer;
     public GameObject player;
-    private List<GameObject> gameObjects = new List<GameObject>();
     private List<RhythmPointInfoModel> rhythmPointInfoModels;
     private GameStatus gameStatus = new GameStatus();
     private int nextPointIndex = 0;
+    private float currentPlayerSpeed = 0;
     // Start is called before the first frame update
 
     void Start()
     {
-        gameStatus = GameStatus.WaitToStart;
+        gameStatus = GameStatus.Init;
         rhythmPointInfoModels = (List<RhythmPointInfoModel>)GameDataManager.GetInstance().GetRhythmPointList().Clone();
 
         rhythmPointInfoModels
@@ -42,18 +43,19 @@ public class GameController : MonoBehaviour
                             break;
                     }
                 }
-                if(gameStatus == GameStatus.Init)
+                if (gameStatus == GameStatus.Init)
                 {
+                    nextPointIndex = 1;
                     gameStatus = GameStatus.WaitToStart;
                 }
             });
 
-        player.ObserveEveryValueChanged(e => e)
+        player.UpdateAsObservable()
             .Where(_ => gameStatus == GameStatus.Playing)
             .Where(_ => nextPointIndex > 0)
             .Subscribe(obj =>
             {
-                
+                movePlayer();
             })
             .AddTo(this);
 
@@ -65,14 +67,6 @@ public class GameController : MonoBehaviour
                 StartGame();
             })
             .AddTo(this);
-
-        //gameObjects
-        //    .ObserveEveryValueChanged(e => e.Select(x => x.transform.localPosition).ToArray())
-        //    .Subscribe(vectors =>
-        //    {
-        //        lineRenderer.positionCount = vectors.Count();
-        //        lineRenderer.SetPositions(vectors);
-        //    });
     }
 
     // Update is called once per frame
@@ -89,6 +83,8 @@ public class GameController : MonoBehaviour
         startTips.SetActive(false);
         Destroy(startTips);
         gameStatus = GameStatus.Playing;
+        float distance = Vector3.Distance(rhythmPointInfoModels[0].vector3, rhythmPointInfoModels[1].vector3);
+        currentPlayerSpeed = distance / rhythmPointInfoModels[1].time;
     }
 
     /// <summary>
@@ -99,6 +95,39 @@ public class GameController : MonoBehaviour
     {
         GameObject gameObject = (GameObject)Instantiate(Resources.Load(Prefabs.BaseRhythmPoint));
         gameObject.transform.position = infoModel.vector3;
+    }
+
+    /// <summary>
+    /// 移动Player
+    /// </summary>
+    private void movePlayer()
+    {
+        RhythmPointInfoModel nextPoint = rhythmPointInfoModels[nextPointIndex];
+        float currentDistance = Vector3.Distance(player.transform.position, nextPoint.vector3);
+        float moveDistance = currentPlayerSpeed * Time.deltaTime;
+        float beyondDistance = moveDistance - currentDistance;
+        if (beyondDistance >= 0)
+        {
+            player.transform.Translate(Vector3.forward * currentDistance);
+            if(nextPointIndex + 1 > rhythmPointInfoModels.Count() - 1)
+            {
+                gameStatus = GameStatus.End;
+                return;
+            }
+            nextPointIndex++;
+            float beyondTime = beyondDistance / currentPlayerSpeed;
+            nextPoint = rhythmPointInfoModels[nextPointIndex];
+            float distance = Vector3.Distance(rhythmPointInfoModels[nextPointIndex - 1].vector3,
+                nextPoint.vector3);
+            currentPlayerSpeed = distance / (nextPoint.time - rhythmPointInfoModels[nextPointIndex - 1].time);
+            Vector3 orientation = nextPoint.vector3 - player.transform.position;
+            player.transform.Translate(orientation.normalized * currentPlayerSpeed * beyondTime);
+        }
+        else
+        {
+            Vector3 orientation = nextPoint.vector3 - player.transform.position;
+            player.transform.Translate(orientation.normalized * moveDistance);
+        }
     }
 
     /// <summary>
