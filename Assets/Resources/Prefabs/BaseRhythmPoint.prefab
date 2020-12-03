@@ -124,7 +124,6 @@ GameObject:
   m_Component:
   - component: {fileID: 830650252655801171}
   - component: {fileID: 830650252655801165}
-  - component: {fileID: 830650252655801164}
   m_Layer: 0
   m_Name: DecisionRing
   m_TagString: Untagged
@@ -197,19 +196,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!111 &830650252655801164
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 830650252655801170}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: b3d6f39ddb8424851ac8914bf6b78e73, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: b3d6f39ddb8424851ac8914bf6b78e73, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 1

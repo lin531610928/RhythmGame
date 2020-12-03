@@ -1,5 +1,8 @@
 ﻿using System;
-namespace AssemblyCSharp.Assets.MusicGame.Scripts.Game
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace AssemblyCSharp.Assets.MusicGame
 {
     public class GameDataManager
     {
@@ -24,6 +27,26 @@ namespace AssemblyCSharp.Assets.MusicGame.Scripts.Game
                 }
             }
             return uniqueInstance;
+        }
+
+        public List<RhythmPointInfoModel> GetRhythmPointList() {
+            List<RhythmPointInfoModel> rhythmPointInfoModels = new List<RhythmPointInfoModel>();
+            RhythmPointInfoModel rhythmPointInfoModel1 = new RhythmPointInfoModel();
+            RhythmPointInfoModel rhythmPointInfoModel2 = new RhythmPointInfoModel();
+            RhythmPointInfoModel rhythmPointInfoModel3 = new RhythmPointInfoModel();
+            RhythmPointInfoModel rhythmPointInfoModel4 = new RhythmPointInfoModel();
+            RhythmPointInfoModel rhythmPointInfoModel5 = new RhythmPointInfoModel();
+            rhythmPointInfoModel1.setValues(PointType.Start, new Vector3(0, -10, 0), 0.0);
+            rhythmPointInfoModel2.setValues(PointType.BaseRhythm, new Vector3(0, -5, 0), 2.0);
+            rhythmPointInfoModel3.setValues(PointType.Base, new Vector3(0, 0, 0), 4.0);
+            rhythmPointInfoModel4.setValues(PointType.BaseRhythm, new Vector3(-5, 0, 0), 6.0);
+            rhythmPointInfoModel5.setValues(PointType.End, new Vector3(-5, 5, 0), 8.0);
+            rhythmPointInfoModels.Add(rhythmPointInfoModel1);
+            rhythmPointInfoModels.Add(rhythmPointInfoModel2);
+            rhythmPointInfoModels.Add(rhythmPointInfoModel3);
+            rhythmPointInfoModels.Add(rhythmPointInfoModel4);
+            rhythmPointInfoModels.Add(rhythmPointInfoModel5);
+            return rhythmPointInfoModels;
         }
     }
 }
