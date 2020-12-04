@@ -35,7 +35,7 @@ public class GameDataModel : MonoBehaviour
     public DecisionResult currentDecisionResult
     {
         get { return currentDecisionResultRB.Value; }
-        set { currentDecisionResultRB.Value = value; }
+        set { currentDecisionResultRB.SetValueAndForceNotify(value); }
     }
 
     // Start is called before the first frame update
