@@ -10,6 +10,7 @@ public class GameDataModel : MonoBehaviour
     public ReactiveProperty<GameStatus> gameStatusRP = new ReactiveProperty<GameStatus>();
     public ReactiveProperty<List<RhythmPointInfoModel>> rhythmPointListRP = new ReactiveProperty<List<RhythmPointInfoModel>>();
     public ReactiveProperty<List<RhythmDecisionInfoModel>> rhythmDecisionListRP = new ReactiveProperty<List<RhythmDecisionInfoModel>>();
+    public ReactiveProperty<DecisionResult> currentDecisionResultRB = new ReactiveProperty<DecisionResult>();
 
     public GameStatus gameStatus
     {
@@ -30,6 +31,11 @@ public class GameDataModel : MonoBehaviour
     {
         get { return rhythmDecisionListRP.Value; }
         set { rhythmDecisionListRP.Value = value; }
+    }
+    public DecisionResult currentDecisionResult
+    {
+        get { return currentDecisionResultRB.Value; }
+        set { currentDecisionResultRB.Value = value; }
     }
 
     // Start is called before the first frame update

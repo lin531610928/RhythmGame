@@ -28,6 +28,13 @@ public class UIPresenter : MonoBehaviour
                     break;
             }
         });
+
+        gameDataModel.currentDecisionResultRB
+            .Where(e => gameDataModel.gameStatus == GameStatus.Playing)
+            .Subscribe(result =>
+            {
+                uiView.ShowDecisionResult(result);
+            });
     }
     // Start is called before the first frame update
     void Start()

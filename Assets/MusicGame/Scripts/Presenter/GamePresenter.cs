@@ -70,6 +70,8 @@ public class GamePresenter : MonoBehaviour
                     && gameView.GetCurrentMusicTime() > (infoModel.time + DecisionRange.Miss))
                     {
                         infoModel.detectStatus = DecisionStatus.End;
+                        infoModel.decisionResult = DecisionResult.Miss;
+                        gameDataModel.currentDecisionResult = infoModel.decisionResult;
                     }
                     if (infoModel.detectStatus == DecisionStatus.End
                     && infoModel.gameObject != null)
@@ -93,6 +95,7 @@ public class GamePresenter : MonoBehaviour
                     decisionInfoModel.decisionResult = GetDecisionResult(decisionInfoModel.time - tapTime);
                     decisionInfoModel.detectStatus = DecisionStatus.End;
                     print(decisionInfoModel.decisionResult);
+                    gameDataModel.currentDecisionResult = decisionInfoModel.decisionResult;
                 }
             });
 
