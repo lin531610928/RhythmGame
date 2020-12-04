@@ -27,7 +27,7 @@ namespace AssemblyCSharp.Assets.MusicGame
 
     public enum DecisionResult
     {
-        Prefre,
+        Perfect,
         Great,
         Good,
         Bad,

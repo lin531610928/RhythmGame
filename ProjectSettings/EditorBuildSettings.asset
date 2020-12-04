@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/MusicGame/Scenes/MusicGame.unity
+    guid: 9cc2ea756e7d142e188630ff11d1333c
   m_configObjects: {}

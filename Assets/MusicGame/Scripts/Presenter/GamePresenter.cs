@@ -130,7 +130,7 @@ public class GamePresenter : MonoBehaviour
         float timeAds = Math.Abs(time);
         if (timeAds <= DecisionRange.Perfect)
         {
-            return DecisionResult.Prefre;
+            return DecisionResult.Perfect;
         }
         else if (timeAds <= DecisionRange.Great)
         {
