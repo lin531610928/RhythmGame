@@ -8,7 +8,6 @@ namespace AssemblyCSharp.Assets.MusicGame
         public PointType type { get; private set; }
         public Vector3 vector3 { get; private set; }
         public float time { get; private set; }
-        public GameObject gameObject { get; set; }
 
         public object Clone()
         {

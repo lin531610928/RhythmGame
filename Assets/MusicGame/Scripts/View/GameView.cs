@@ -35,7 +35,7 @@ public class GameView : MonoBehaviour
     /// 设置基本节拍点
     /// </summary>
     /// <param name="infoModel">节拍点信息</param>
-    public GameObject getBaseRhythmPoint(RhythmPointInfoModel infoModel)
+    public GameObject GetBaseRhythmPoint(RhythmPointInfoModel infoModel)
     {
         GameObject gameObject = (GameObject)Instantiate(Resources.Load(Prefabs.BaseRhythmPoint));
         gameObject.transform.position = infoModel.vector3;
@@ -57,5 +57,24 @@ public class GameView : MonoBehaviour
     public void StartGame()
     {
         musicControl.Play();
+    }
+
+    public void SetAnimation(List<RhythmDecisionInfoModel> infos)
+    {
+        foreach (RhythmDecisionInfoModel info in infos)
+        {
+            if (info.type == PointType.BaseRhythm
+                && musicControl.time + 1.0f >= info.time
+                && info.gameObject != null
+                && info.detectStatus == DecisionStatus.WaitToStart) {
+                info.detectStatus = DecisionStatus.Animating;
+                info.gameObject.GetComponentInChildren<Animation>().Play();
+            }
+        }
+    }
+
+    public float GetCurrentMusicTime()
+    {
+        return musicControl.time;
     }
 }

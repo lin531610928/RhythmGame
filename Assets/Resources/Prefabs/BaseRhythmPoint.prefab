@@ -92,7 +92,6 @@ GameObject:
   m_Component:
   - component: {fileID: 830650251871314385}
   - component: {fileID: 6972975446925427977}
-  - component: {fileID: -7734763401400091145}
   m_Layer: 0
   m_Name: BaseRhythmPoint
   m_TagString: Untagged
@@ -128,22 +127,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b39ee1d24708044cebf2f226bcf3a051, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!111 &-7734763401400091145
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 830650251871314384}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: b3d6f39ddb8424851ac8914bf6b78e73, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: b3d6f39ddb8424851ac8914bf6b78e73, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 0
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!1 &830650252655801170
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,6 +137,7 @@ GameObject:
   m_Component:
   - component: {fileID: 830650252655801171}
   - component: {fileID: 830650252655801165}
+  - component: {fileID: 265007574003501740}
   m_Layer: 0
   m_Name: DecisionRing
   m_TagString: Untagged
@@ -226,3 +210,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!111 &265007574003501740
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830650252655801170}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: b3d6f39ddb8424851ac8914bf6b78e73, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: b3d6f39ddb8424851ac8914bf6b78e73, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0

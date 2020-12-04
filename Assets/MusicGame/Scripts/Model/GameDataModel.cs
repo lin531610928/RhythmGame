@@ -9,6 +9,7 @@ public class GameDataModel : MonoBehaviour
     public IntReactiveProperty nextPointIndexRP = new IntReactiveProperty();
     public ReactiveProperty<GameStatus> gameStatusRP = new ReactiveProperty<GameStatus>();
     public ReactiveProperty<List<RhythmPointInfoModel>> rhythmPointListRP = new ReactiveProperty<List<RhythmPointInfoModel>>();
+    public ReactiveProperty<List<RhythmDecisionInfoModel>> rhythmDecisionListRP = new ReactiveProperty<List<RhythmDecisionInfoModel>>();
 
     public GameStatus gameStatus
     {
@@ -24,6 +25,11 @@ public class GameDataModel : MonoBehaviour
     {
         get { return rhythmPointListRP.Value; }
         set { rhythmPointListRP.Value = value; }
+    }
+    public List<RhythmDecisionInfoModel> rhythmDecisionList
+    {
+        get { return rhythmDecisionListRP.Value; }
+        set { rhythmDecisionListRP.Value = value; }
     }
 
     // Start is called before the first frame update
@@ -41,7 +47,7 @@ public class GameDataModel : MonoBehaviour
     /// <summary>
     /// 获取游戏数据
     /// </summary>
-    public void getGameData()
+    public void GetGameData()
     {
         rhythmPointList = (List<RhythmPointInfoModel>)GameDataManager.GetInstance().GetRhythmPointList().Clone();
     }

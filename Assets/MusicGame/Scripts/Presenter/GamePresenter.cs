@@ -18,6 +18,7 @@ public class GamePresenter : MonoBehaviour
             .Subscribe(list =>
             {
                 gameView.CteatePath(list);
+                List<RhythmDecisionInfoModel> decisionInfoModels = new List<RhythmDecisionInfoModel>();
                 for (int i = 0; i < list.Count(); i++)
                 {
                     switch (list[i].type)
@@ -26,13 +27,16 @@ public class GamePresenter : MonoBehaviour
                             gameView.SetPlayerPosition(list[i].vector3);
                             break;
                         case PointType.BaseRhythm:
-                            list[i].gameObject = gameView.getBaseRhythmPoint(list[i]);
+                            RhythmDecisionInfoModel decisionInfoModel = new RhythmDecisionInfoModel();
+                            decisionInfoModel.setValues(list[i]);
+                            decisionInfoModel.gameObject = gameView.GetBaseRhythmPoint(list[i]);
+                            decisionInfoModels.Add(decisionInfoModel);
                             break;
                         default:
                             break;
                     }
                 }
-                gameDataModel.rhythmPointList = list;
+                gameDataModel.rhythmDecisionList = decisionInfoModels;
                 gameDataModel.gameStatus = GameStatus.WaitToStart;
             })
             .AddTo(this);
@@ -53,6 +57,43 @@ public class GamePresenter : MonoBehaviour
                     gameView.SetPlayerPosition(gameDataModel.rhythmPointList[gameDataModel.nextPointIndex].vector3);
                     gameDataModel.nextPointIndex++;
                 }
+                gameView.SetAnimation(gameDataModel.rhythmDecisionList);
+                foreach (RhythmDecisionInfoModel infoModel in gameDataModel.rhythmDecisionList)
+                {
+                    if (gameView.GetCurrentMusicTime() >= (infoModel.time - DecisionRange.Miss)
+                    && (infoModel.detectStatus == DecisionStatus.WaitToStart
+                    || infoModel.detectStatus == DecisionStatus.Animating))
+                    {
+                        infoModel.detectStatus = DecisionStatus.Detecting;
+                    }
+                    if (infoModel.detectStatus == DecisionStatus.Detecting
+                    && gameView.GetCurrentMusicTime() > (infoModel.time + DecisionRange.Miss))
+                    {
+                        infoModel.detectStatus = DecisionStatus.End;
+                    }
+                    if (infoModel.detectStatus == DecisionStatus.End
+                    && infoModel.gameObject != null)
+                    {
+                        infoModel.gameObject.SetActive(false);
+                        Destroy(infoModel.gameObject);
+                    }
+                }
+            });
+
+        Observable.Timer(TimeSpan.FromMilliseconds(0.1f))
+            .RepeatUntilDisable(this)
+            .Where(_ => gameDataModel.gameStatus == GameStatus.Playing)
+            .Where(_ => gameView.musicControl.isPlaying)
+            .Where(_ => Input.GetMouseButtonDown(0))
+            .Subscribe(_ => {
+                float tapTime = gameView.GetCurrentMusicTime();
+                RhythmDecisionInfoModel decisionInfoModel = gameDataModel.rhythmDecisionList.Find(e => e.detectStatus == DecisionStatus.Detecting);
+                print(tapTime);
+                if (decisionInfoModel != null) {
+                    decisionInfoModel.decisionResult = GetDecisionResult(decisionInfoModel.time - tapTime);
+                    decisionInfoModel.detectStatus = DecisionStatus.End;
+                    print(decisionInfoModel.decisionResult);
+                }
             });
 
         gameDataModel.gameStatusRP.Subscribe(status =>
@@ -69,7 +110,7 @@ public class GamePresenter : MonoBehaviour
         });
 
         gameView.SetMusic();
-        gameDataModel.getGameData();
+        gameDataModel.GetGameData();
     }
 
     // Start is called before the first frame update
@@ -82,5 +123,30 @@ public class GamePresenter : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private DecisionResult GetDecisionResult(float time)
+    {
+        float timeAds = Math.Abs(time);
+        if (timeAds <= DecisionRange.Perfect)
+        {
+            return DecisionResult.Prefre;
+        }
+        else if (timeAds <= DecisionRange.Great)
+        {
+            return DecisionResult.Great;
+        }
+        else if (timeAds <= DecisionRange.Good)
+        {
+            return DecisionResult.Good;
+        }
+        else if (timeAds <= DecisionRange.Bad)
+        {
+            return DecisionResult.Bad;
+        }
+        else
+        {
+            return DecisionResult.Miss;
+        }
     }
 }

@@ -16,4 +16,21 @@ namespace AssemblyCSharp.Assets.MusicGame
         Playing,
         End
     }
+
+    public enum DecisionStatus
+    {
+        WaitToStart,
+        Animating,
+        Detecting,
+        End
+    }
+
+    public enum DecisionResult
+    {
+        Prefre,
+        Great,
+        Good,
+        Bad,
+        Miss
+    }
 }
