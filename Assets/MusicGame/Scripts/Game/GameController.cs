@@ -83,8 +83,6 @@ public class GameController : MonoBehaviour
         startTips.SetActive(false);
         Destroy(startTips);
         gameStatus = GameStatus.Playing;
-        float distance = Vector3.Distance(rhythmPointInfoModels[0].vector3, rhythmPointInfoModels[1].vector3);
-        currentPlayerSpeed = distance / rhythmPointInfoModels[1].time;
     }
 
     /// <summary>
@@ -106,10 +104,16 @@ public class GameController : MonoBehaviour
         float currentDistance = Vector3.Distance(player.transform.position, nextPoint.vector3);
         float moveDistance = currentPlayerSpeed * Time.deltaTime;
         float beyondDistance = moveDistance - currentDistance;
+        if (currentPlayerSpeed == 0)
+        {
+            float distance = Vector3.Distance(rhythmPointInfoModels[nextPointIndex - 1].vector3,
+                rhythmPointInfoModels[nextPointIndex].vector3);
+            currentPlayerSpeed = distance / rhythmPointInfoModels[1].time;
+        }
         if (beyondDistance >= 0)
         {
-            player.transform.Translate(Vector3.forward * currentDistance);
-            if(nextPointIndex + 1 > rhythmPointInfoModels.Count() - 1)
+            player.transform.position = nextPoint.vector3;
+            if (nextPointIndex + 1 > rhythmPointInfoModels.Count() - 1)
             {
                 gameStatus = GameStatus.End;
                 return;
@@ -117,16 +121,16 @@ public class GameController : MonoBehaviour
             nextPointIndex++;
             float beyondTime = beyondDistance / currentPlayerSpeed;
             nextPoint = rhythmPointInfoModels[nextPointIndex];
-            float distance = Vector3.Distance(rhythmPointInfoModels[nextPointIndex - 1].vector3,
-                nextPoint.vector3);
+            float distance = Vector3.Distance(rhythmPointInfoModels[nextPointIndex - 1].vector3, nextPoint.vector3);
             currentPlayerSpeed = distance / (nextPoint.time - rhythmPointInfoModels[nextPointIndex - 1].time);
             Vector3 orientation = nextPoint.vector3 - player.transform.position;
-            player.transform.Translate(orientation.normalized * currentPlayerSpeed * beyondTime);
+            player.transform.Translate(orientation.normalized * currentPlayerSpeed * beyondTime, Space.World);
         }
         else
         {
             Vector3 orientation = nextPoint.vector3 - player.transform.position;
-            player.transform.Translate(orientation.normalized * moveDistance);
+            print(orientation.normalized);
+            player.transform.Translate(orientation.normalized * moveDistance, Space.World);
         }
     }
 
