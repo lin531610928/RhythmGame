@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using AssemblyCSharp.Assets.MusicGame;
 using UnityEngine;
 using UniRx;
+using DG.Tweening;
 
 public class PlayerView : MonoBehaviour
 {
-    private CompositeDisposable disposables = new CompositeDisposable();
+    private Sequence sequence;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,27 +20,17 @@ public class PlayerView : MonoBehaviour
         
     }
 
-    void OnDestroy()
-    {
-        disposables.Dispose();
-    }
-
     /// <summary>
     /// 移动Player
     /// </summary>
-    public void movePlayer(RhythmPointInfoModel currentPoint, RhythmPointInfoModel nextPoint) {
-        disposables.Clear();
-        transform.position = currentPoint.vector3;
-        float currentSpeed = Vector3.Distance(currentPoint.vector3, nextPoint.vector3) / (nextPoint.time - currentPoint.time);
-        Vector3 orientation = nextPoint.vector3 - transform.position;
-        Observable
-            .EveryUpdate()
-            .Subscribe(_ =>
-            {
-                float currentDistance = Vector3.Distance(transform.position, nextPoint.vector3);
-                float moveDistance = (currentSpeed * Time.deltaTime);
-                transform.Translate(orientation.normalized * Mathf.Min(currentDistance, moveDistance), Space.World);
-            })
-            .AddTo(disposables);
+    public void movePlayer(MovePathInfoModel movePathInfo) {
+        if (sequence != null && sequence.IsPlaying()) {
+            sequence.Kill();
+        }
+        sequence = DOTween.Sequence();
+        Vector3[] path = new Vector3[movePathInfo.lineRenderer.positionCount];
+        movePathInfo.lineRenderer.GetPositions(path);
+        sequence.Append(transform.DOPath(path, movePathInfo.duration).SetEase(Ease.Linear));
+        sequence.Play();
     }
 }

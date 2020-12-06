@@ -6,6 +6,7 @@ using AssemblyCSharp.Assets.MusicGame;
 
 public class GameDataModel : MonoBehaviour
 {
+    public IntReactiveProperty nextPathIndexRP = new IntReactiveProperty();
     public IntReactiveProperty nextPointIndexRP = new IntReactiveProperty();
     public ReactiveProperty<GameStatus> gameStatusRP = new ReactiveProperty<GameStatus>();
     public ReactiveProperty<List<RhythmPointInfoModel>> rhythmPointListRP = new ReactiveProperty<List<RhythmPointInfoModel>>();
@@ -16,6 +17,11 @@ public class GameDataModel : MonoBehaviour
     {
         get { return gameStatusRP.Value; }
         set { gameStatusRP.Value = value; }
+    }
+    public int nextPathIndex
+    {
+        get { return nextPathIndexRP.Value; }
+        set { nextPathIndexRP.SetValueAndForceNotify(value); }
     }
     public int nextPointIndex
     {
@@ -37,6 +43,7 @@ public class GameDataModel : MonoBehaviour
         get { return currentDecisionResultRB.Value; }
         set { currentDecisionResultRB.SetValueAndForceNotify(value); }
     }
+    public List<MovePathInfoModel> movePathList = new List<MovePathInfoModel>();
 
     // Start is called before the first frame update
     void Start()

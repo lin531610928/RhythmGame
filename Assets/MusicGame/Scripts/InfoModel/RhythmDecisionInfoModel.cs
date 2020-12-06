@@ -5,7 +5,7 @@ namespace AssemblyCSharp.Assets.MusicGame
 {
     public class RhythmDecisionInfoModel
     {
-        public PointType type { get; private set; }
+        public NoteType type { get; private set; }
         public GameObject gameObject { get; set; }
         public float time { get; private set; }
         public DecisionStatus detectStatus { get; set; }
@@ -16,10 +16,10 @@ namespace AssemblyCSharp.Assets.MusicGame
             detectStatus = DecisionStatus.WaitToStart;
         }
 
-        public void setValues(RhythmPointInfoModel info)
+        public void setValues(NoteType noteType, float time)
         {
-            this.type = info.type;
-            this.time = info.time;
+            this.type = noteType;
+            this.time = time;
         }
     }
 }

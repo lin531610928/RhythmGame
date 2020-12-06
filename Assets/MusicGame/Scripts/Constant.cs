@@ -4,6 +4,7 @@ namespace AssemblyCSharp.Assets.MusicGame
     public static class Prefabs
     {
         public const string BaseRhythmPoint = "Prefabs/BaseRhythmPoint";
+        public const string LinePath = "Prefabs/LinePath";
     }
     public static class Music
     {

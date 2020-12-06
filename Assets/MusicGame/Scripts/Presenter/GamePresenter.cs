@@ -17,23 +17,23 @@ public class GamePresenter : MonoBehaviour
             .First(e => e != null)
             .Subscribe(list =>
             {
-                gameView.CteatePath(list);
+                gameDataModel.movePathList = gameView.GetMovePaths(list);
                 List<RhythmDecisionInfoModel> decisionInfoModels = new List<RhythmDecisionInfoModel>();
                 for (int i = 0; i < list.Count(); i++)
                 {
-                    switch (list[i].type)
+                    switch (list[i].noteType)
                     {
-                        case PointType.Start:
-                            gameView.SetPlayerPosition(list[i].vector3);
-                            break;
-                        case PointType.BaseRhythm:
+                        case NoteType.Base:
                             RhythmDecisionInfoModel decisionInfoModel = new RhythmDecisionInfoModel();
-                            decisionInfoModel.setValues(list[i]);
+                            decisionInfoModel.setValues(NoteType.Base, list[i].time);
                             decisionInfoModel.gameObject = gameView.GetBaseRhythmPoint(list[i]);
                             decisionInfoModels.Add(decisionInfoModel);
                             break;
                         default:
                             break;
+                    }
+                    if (list[i].pointType == PointType.Start) {
+                        gameView.SetPlayerPosition(list[i].vector3);
                     }
                 }
                 gameDataModel.rhythmDecisionList = decisionInfoModels;
@@ -41,20 +41,22 @@ public class GamePresenter : MonoBehaviour
             })
             .AddTo(this);
 
-        gameDataModel.nextPointIndexRP.Subscribe(index =>
-        {
-            //playerView.movePlayer
-        });
-
         Observable.Timer(TimeSpan.FromMilliseconds(0.1f))
             .RepeatUntilDisable(this)
             .Where(_ => gameDataModel.gameStatus == GameStatus.Playing)
             .Where(_ => gameView.musicControl.isPlaying)
             .Subscribe(_ => {
+                if (gameDataModel.nextPathIndex < 0) {
+                    gameDataModel.nextPathIndex = 0;
+                }
                 if (gameView.musicControl.time > gameDataModel.rhythmPointList[gameDataModel.nextPointIndex].time
                 && gameDataModel.nextPointIndex + 1 < gameDataModel.rhythmPointList.Count)
                 {
-                    gameView.SetPlayerPosition(gameDataModel.rhythmPointList[gameDataModel.nextPointIndex].vector3);
+                    if (gameDataModel.rhythmPointList[gameDataModel.nextPointIndex].pointType != PointType.BezierMiddle)
+                    {
+                        gameView.SetPlayerPosition(gameDataModel.rhythmPointList[gameDataModel.nextPointIndex].vector3);
+                        gameDataModel.nextPathIndex++;
+                    }
                     gameDataModel.nextPointIndex++;
                 }
                 gameView.SetAnimation(gameDataModel.rhythmDecisionList);
@@ -90,11 +92,9 @@ public class GamePresenter : MonoBehaviour
             .Subscribe(_ => {
                 float tapTime = gameView.GetCurrentMusicTime();
                 RhythmDecisionInfoModel decisionInfoModel = gameDataModel.rhythmDecisionList.Find(e => e.detectStatus == DecisionStatus.Detecting);
-                print(tapTime);
                 if (decisionInfoModel != null) {
                     decisionInfoModel.decisionResult = GetDecisionResult(decisionInfoModel.time - tapTime);
                     decisionInfoModel.detectStatus = DecisionStatus.End;
-                    print(decisionInfoModel.decisionResult);
                     gameDataModel.currentDecisionResult = decisionInfoModel.decisionResult;
                 }
             });
@@ -106,6 +106,7 @@ public class GamePresenter : MonoBehaviour
                 case GameStatus.Playing:
                     gameView.StartGame();
                     gameDataModel.nextPointIndex = 1;
+                    gameDataModel.nextPathIndex = -1;
                     break;
                 default:
                     break;

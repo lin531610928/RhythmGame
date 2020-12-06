@@ -11,11 +11,12 @@ public class PlayerPresenter : MonoBehaviour
 
     void Awake()
     {
-        gameDataModel.nextPointIndexRP
+        gameDataModel.nextPathIndexRP
             .Where(_ => gameDataModel.gameStatus == GameStatus.Playing)
+            .Where(e => e >= 0)
             .Subscribe(index =>
             {
-                playerView.movePlayer(gameDataModel.rhythmPointList[index - 1], gameDataModel.rhythmPointList[index]);
+                playerView.movePlayer(gameDataModel.movePathList[index]);
             });
     }
 

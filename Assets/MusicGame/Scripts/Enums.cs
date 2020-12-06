@@ -1,12 +1,26 @@
 ﻿using System;
 namespace AssemblyCSharp.Assets.MusicGame
 {
+    public enum NoteType
+    {
+        Base,
+        LongTap
+    }
+
     public enum PointType
     {
         Base,
         Start,
         End,
-        BaseRhythm
+        BezierStart,
+        BezierMiddle,
+        BezierEnd
+    }
+
+    public enum PathType
+    {
+        Line,
+        BezierCurve
     }
 
     public enum GameStatus

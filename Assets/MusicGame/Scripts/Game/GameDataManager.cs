@@ -36,11 +36,11 @@ namespace AssemblyCSharp.Assets.MusicGame
             RhythmPointInfoModel rhythmPointInfoModel3 = new RhythmPointInfoModel();
             RhythmPointInfoModel rhythmPointInfoModel4 = new RhythmPointInfoModel();
             RhythmPointInfoModel rhythmPointInfoModel5 = new RhythmPointInfoModel();
-            rhythmPointInfoModel1.setValues(PointType.Start, new Vector3(0, -10, 0), 0.0f);
-            rhythmPointInfoModel2.setValues(PointType.BaseRhythm, new Vector3(-5, -10, 0), 2.0f);
-            rhythmPointInfoModel3.setValues(PointType.Base, new Vector3(0, 0, 0), 4.0f);
-            rhythmPointInfoModel4.setValues(PointType.BaseRhythm, new Vector3(-5, 0, 0), 6.0f);
-            rhythmPointInfoModel5.setValues(PointType.End, new Vector3(-5, 5, 0), 8.0f);
+            rhythmPointInfoModel1.setValues(null, PointType.Start, new Vector3(0, -10, 0), 0.0f);
+            rhythmPointInfoModel2.setValues(NoteType.Base, PointType.BezierStart, new Vector3(-5, -10, 0), 2.0f);
+            rhythmPointInfoModel3.setValues(null, PointType.BezierMiddle, new Vector3(0, 0, 0), 4.0f);
+            rhythmPointInfoModel4.setValues(NoteType.Base, PointType.BezierEnd, new Vector3(-5, 0, 0), 6.0f);
+            rhythmPointInfoModel5.setValues(null, PointType.End, new Vector3(-5, 5, 0), 8.0f);
             rhythmPointInfoModels.Add(rhythmPointInfoModel1);
             rhythmPointInfoModels.Add(rhythmPointInfoModel2);
             rhythmPointInfoModels.Add(rhythmPointInfoModel3);
