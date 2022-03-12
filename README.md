@@ -10,16 +10,13 @@
   This script does blah blah blah
 }
 
-define(address,"ed8_ps5_D3D11.exe"+2AF95D)
-define(bytes,41 0F 28 C2 F3 0F 10 0D CF A5 81 00)
-
 [ENABLE]
 //code from here to '[DISABLE]' will be used to enable the cheat
 
  
  
-assert(address,bytes)
-alloc(newmem,$1000,"ed8_ps5_D3D11.exe"+2AF95D)
+aobscanmodule(INJECT,ed8_ps5_D3D11.exe,41 0F 28 C2 F3 0F 10 0D CF A5 81 00) // should be unique
+alloc(newmem,$1000,INJECT)
 
 label(code)
 label(return)
@@ -31,18 +28,18 @@ code:
   movss xmm1,[ed8_ps5_D3D11.exe+AC9F38]
   jmp return
 
-address:
+INJECT:
   jmp newmem
   nop 7
 return:
+registersymbol(INJECT)
 
 [DISABLE]
 //code from here till the end of the code will be used to disable the cheat
-address:
-  db bytes
-  // movaps xmm0,xmm10
-  // movss xmm1,[ed8_ps5_D3D11.exe+AC9F38]
+INJECT:
+  db 41 0F 28 C2 F3 0F 10 0D CF A5 81 00
 
+unregistersymbol(INJECT)
 dealloc(newmem)
 
 {
