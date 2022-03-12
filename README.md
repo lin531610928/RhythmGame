@@ -20,9 +20,15 @@ alloc(newmem,$1000,INJECT)
 
 label(code)
 label(return)
-
+label(exit)
 newmem:
-
+  mov edx, 0xc28c0000
+  mov [rdi+990], edx
+  movss xmm1, [rdi+964]
+  xorps xmm9,xmm9
+  subss xmm9, xmm1
+  subss xmm10, xmm9
+  
 code:
   movaps xmm0,xmm10
   movss xmm1,[ed8_ps5_D3D11.exe+AC9F38]
